@@ -1,0 +1,9 @@
+*.mp4 binary
+*.mov binary
+*.avi binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.pt binary
+*.pth binary
+*.ckpt binary

@@ -1,0 +1,63 @@
+# Python build and cache files
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Local environments and build outputs
+.venv/
+venv/
+env/
+dist/
+build/
+*.egg-info/
+
+# Local editor / assistant state
+.DS_Store
+.idea/
+.vscode/
+.claude/
+.codex
+.codex/
+
+# Experiment outputs: keep these local unless a specific artifact is
+# intentionally moved into a documented, curated asset location.
+runs/
+artifacts/
+logs/
+wandb/
+lightning_logs/
+mlruns/
+
+# Training logs, model weights, and exported metrics
+*.log
+*.out
+*.err
+events.out.tfevents.*
+*.tfevents*
+*.pt
+*.pth
+*.ckpt
+*.onnx
+metrics.csv
+metrics.jsonl
+
+# Generated recordings are ignored by default. The media directory is reserved
+# for small, intentionally curated assets used by the README.
+*.mp4
+*.mov
+*.avi
+media/*
+!media/
+!media/*.gif
+!media/*.png
+!media/*.jpg
+media/*.mp4
+
+# Pinned upstream source is fetched by scripts/bootstrap_env.sh.
+third_party/ManiSkill/
+!third_party/.gitkeep
