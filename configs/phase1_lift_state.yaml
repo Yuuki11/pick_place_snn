@@ -1,0 +1,14 @@
+args:
+  exp_name: phase1_lift_state
+  env_id: PandaLiftCube-v0
+  num_envs: 16
+  num_eval_envs: 16
+  num_steps: 100
+  num_eval_steps: 100
+  control_mode: pd_ee_delta_pos
+  utd: 0.5
+  buffer_size: 500000
+  total_timesteps: 500000
+  eval_freq: 10000
+  log_freq: 1000
+

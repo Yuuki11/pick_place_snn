@@ -1,0 +1,12 @@
+args:
+  exp_name: phase0_pickcube_state_sanity
+  env_id: PickCube-v1
+  num_envs: 16
+  num_eval_envs: 16
+  control_mode: pd_ee_delta_pos
+  utd: 0.5
+  buffer_size: 10000
+  total_timesteps: 2048
+  eval_freq: 8
+  log_freq: 512
+  save_train_video_freq: 8
