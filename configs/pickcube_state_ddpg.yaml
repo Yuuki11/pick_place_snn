@@ -1,0 +1,14 @@
+args:
+  exp_name: pickcube_state_ddpg
+  env_id: PickCube-v1
+  num_envs: 16
+  num_eval_envs: 16
+  control_mode: pd_ee_delta_pos
+  buffer_size: 500000
+  total_timesteps: 1000000
+  eval_freq: 10000
+  log_freq: 1000
+  training_freq: 64
+  learning_starts: 4000
+  exploration_noise: 0.1
+
