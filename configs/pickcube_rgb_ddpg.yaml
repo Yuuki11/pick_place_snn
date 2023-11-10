@@ -1,0 +1,27 @@
+args:
+  exp_name: pickcube_rgb_ddpg
+  env_id: PickCube-v1
+  obs_mode: rgb
+  include_state: true
+  num_envs: 16
+  num_eval_envs: 16
+  control_mode: pd_ee_delta_pos
+  camera_width: 64
+  camera_height: 64
+  buffer_size: 150000
+  total_timesteps: 1000000
+  eval_freq: 10000
+  log_freq: 1000
+  training_freq: 64
+  learning_starts: 4000
+  batch_size: 256
+  save_train_video_freq: 200
+  exploration_noise: 0.1
+oom_fallback_ladder:
+  - buffer_size: 100000
+  - buffer_size: 100000
+    num_envs: 12
+    num_eval_envs: 12
+  - buffer_size: 100000
+    num_envs: 8
+    num_eval_envs: 8
