@@ -1,0 +1,16 @@
+script_path: src/rl_dev/algorithms/ddpg_rgb.py
+args:
+  exp_name: pickcube_rgb_ddpg_eval
+  env_id: PickCube-v1
+  obs_mode: rgb
+  include_state: true
+  evaluate: true
+  checkpoint: runs/pickcube_rgb_ddpg/final_ckpt.pt
+  num_envs: 16
+  num_eval_envs: 16
+  control_mode: pd_ee_delta_pos
+  camera_width: 64
+  camera_height: 64
+  eval_freq: 1
+  total_timesteps: 1
+
