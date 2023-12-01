@@ -1,0 +1,24 @@
+args:
+  exp_name: phase1_lift_state_snn_ddpg
+  track: true
+  wandb_project_name: ManiSkill-SNN
+  env_id: PandaLiftCube-v0
+  num_envs: 16
+  num_eval_envs: 16
+  num_steps: 100
+  num_eval_steps: 100
+  control_mode: pd_ee_delta_pos
+  buffer_size: 500000
+  total_timesteps: 500000
+  eval_freq: 10000
+  log_freq: 1000
+  training_freq: 64
+  learning_starts: 4000
+  batch_size: 1024
+  exploration_noise: 0.15
+  # SNN architecture
+  snn_timesteps: 16
+  snn_beta: 0.9
+  snn_slope: 25.0
+  snn_hidden: 256
+  pop_size: 10
