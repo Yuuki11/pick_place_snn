@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=70", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rl-dev"
+version = "0.1.0"
+description = "Headless ManiSkill visual RL project for Panda lift and pick tasks."
+readme = "README.md"
+requires-python = ">=3.11,<3.12"
+dependencies = [
+  "mani-skill==3.0.0b22",
+  "torch==2.3.1",
+  "gymnasium==0.29.1",
+  "tensorboard>=2.20.0",
+  "pandas>=3.0.0",
+  "pyyaml>=6.0.3",
+  "imageio>=2.37.0",
+  "imageio-ffmpeg>=0.6.0",
+  "rich>=15.0.0",
+  "snntorch>=0.9.0",
+  "tyro>=0.9.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.3.0",
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+  "integration: tests that require ManiSkill rendering and GPU simulation",
+]
