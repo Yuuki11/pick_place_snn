@@ -90,6 +90,50 @@ SNN-specific:
 | `snn_hidden` | 256 |
 | `pop_size` | 10 |
 
+## Results
+
+### State observations
+
+`PandaLiftCube-v0`, state obs, 500k env steps, 3 seeds per method (the
+`phase1_lift_state*` configs with `seed: 1-3`). Each final checkpoint is rolled
+out deterministically for 256 episodes on the same env seeds for every run;
+numbers are mean ± std across seeds. "Steps to 50%" is the first in-training
+eval (16 episodes) at or above 50% success.
+
+| Method | Seeds | Success (once) | Success (at end) | Return | Grasp rate | Lift rate | Drop after lift | Longest hold (steps) | Steps to 50% | Train time (h) |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| SAC | 3 | 47.3 ± 10.3% | 42.1 ± 8.3% | 54.59 ± 1.57 | 99.9 ± 0.2% | 90.1 ± 5.9% | 2.2 ± 1.2% | 35.79 ± 7.31 | 107 ± 25k (3/3) | 1.91 ± 0.00 |
+| DDPG | 3 | 0.1 ± 0.2% | 0.1 ± 0.2% | 22.89 ± 7.00 | 89.3 ± 5.7% | 81.8 ± 8.2% | 43.8 ± 3.8% | 0.07 ± 0.11 | never | 2.06 ± 0.01 |
+| SNN-DDPG | 3 | 0.0 ± 0.0% | 0.0 ± 0.0% | 38.98 ± 3.09 | 98.6 ± 1.8% | 97.1 ± 1.9% | 10.8 ± 8.5% | 1.44 ± 0.70 | never | 8.06 ± 0.19 |
+
+![State learning curves](media/phase1_state_learning_curves.png)
+
+- SAC is the only method that solves the task: 47% success on held-out
+  episodes, and every seed reaches 50% in-training success by ~130k steps.
+- DDPG and SNN-DDPG both learn to grasp and lift, but neither passes the hold
+  check (cube still, < 0.1 m/s, for 30 steps): the longest hold per episode
+  averages under 2 steps, so success stays at ~0%.
+- The spiking actor beats plain DDPG on everything short of success: higher
+  return (39 vs 23), more lifts (97% vs 82%), far fewer drops after lifting
+  (11% vs 44%), and a tighter spread in return across seeds (±3 vs ±7).
+- SNN-DDPG costs ~4x the wall-clock of DDPG, since the actor is unrolled for 16
+  timesteps per forward pass.
+
+Train times are wall-clock on an RTX 4070 Laptop GPU (8 GB) under WSL2, with two
+runs sharing the GPU. Per-run numbers, the eval curves and the full summary are
+in [`results/phase1_state/`](results/phase1_state/). RGB results are not in yet.
+
+To regenerate after training:
+
+```bash
+python scripts/evaluate_checkpoints.py runs/phase1_lift_state_s[0-9]* \
+    runs/phase1_lift_state_ddpg_s[0-9]* runs/phase1_lift_state_snn_ddpg_s[0-9]*
+python scripts/summarize_results.py --name phase1_state \
+    --group SAC=phase1_lift_state \
+    --group DDPG=phase1_lift_state_ddpg \
+    --group SNN-DDPG=phase1_lift_state_snn_ddpg
+```
+
 ## Setup
 
 Linux, NVIDIA GPU (CUDA 12.1), conda.
@@ -149,7 +193,7 @@ python scripts/evaluate_sac.py  --config configs/eval_lift_rgb.yaml
 python scripts/evaluate_ddpg.py --config configs/eval_lift_rgb_ddpg.yaml
 
 tensorboard --logdir runs/
-python scripts/export_metrics.py --run-dir runs/<run_name>
+python scripts/export_metrics.py runs/<run_name>
 ```
 
 Checkpoints, logs and videos are written to `runs/` (gitignored).
@@ -167,11 +211,12 @@ VISRL_RUN_MANISKILL_TESTS=1 pytest tests/test_lift_cube.py -m integration
 
 ```text
 configs/            experiment and eval configs
-scripts/            setup, training, eval, metrics export
+scripts/            setup, training, eval, metrics export, result summaries
 src/rl_dev/
   algorithms/       DDPG and SNN-DDPG (state, rgb)
   envs/             PandaLiftCube-v0
-  utils/            config loading, launchers, tensorboard export
+  utils/            config loading, launchers, tensorboard export, result aggregation
+results/            aggregated metrics (CSV + markdown) per experiment
 tests/
 third_party/        ManiSkill source (cloned by bootstrap)
 ```

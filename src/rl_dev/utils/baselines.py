@@ -177,7 +177,7 @@ def run_python_entrypoint(
         base_run_name = launch_args.get("run_name") or launch_args.get("exp_name", run_name)
         if "run_name" in launch_args and len(attempts) > 1:
             launch_args["run_name"] = f"{base_run_name}__try{attempt_index}"
-        cli_args = build_tyro_args(launch_args)
+        cli_args = build_tyro_args(launch_args, include_false_booleans=True)
         command = [sys.executable, "-c", bootstrap, str(script_path), *cli_args]
         attempt_run_name = launch_args.get("run_name") or launch_args.get("exp_name", run_name)
         run_dir = cwd / "runs" / attempt_run_name
